@@ -27,6 +27,7 @@
 
 <script>
 import axios from "axios";
+import { query } from "express";
 export default {
 
   name: 'App',
@@ -39,7 +40,7 @@ export default {
 
     return {
       searchbox: "",
-      URL_APi: "https://api.themoviedb.org/3/search/movie?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&query=string",
+      // URL_APi:"https://api.themoviedb.org/3/search/movie?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&query=string",
       movies: [],
 
       error: null,
@@ -50,7 +51,7 @@ export default {
   methods: {
     callApi() {
       axios
-        .get(this.URL_APi)
+        .get(`https://api.themoviedb.org/3/search/movie?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&${query=searchbox}`)
         .then((response) => {
 
           this.movies = response.data.results;
@@ -67,7 +68,7 @@ export default {
 
     filterMovie(){
       const movie_filtr = [];
-      if((this.movies).includes(this.searchbox)){
+      if((this.movies).includes(this.searchbox.toLowerCase())){
         console.log("ok");
         movie_filtr.push(this.movies);
         console.log(movie_filtr);
@@ -77,16 +78,16 @@ export default {
       this.searchbox="";
     }
 
-    
-
-        
-
 
   },
   mounted() {
     this.callApi();
   },
 };
+    
+
+        
+
 
 
 
@@ -118,5 +119,9 @@ header {
 #search {
   padding: 5px 10px;
   margin: 10px;
+}
+
+h3{
+  color:red;
 }
 </style>
