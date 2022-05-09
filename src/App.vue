@@ -22,7 +22,7 @@
 
       <ul class="series">
         <li v-for="serie in series" :key="serie.id">
-            <h3>{{serie.title}}</h3>
+            <h1>{{serie.title}}</h1>
           <h2>{{serie.original_title}}</h2>
           <h2>{{serie.original_language}}</h2>
           <h2>{{serie.vote_average}}</h2>
@@ -51,11 +51,11 @@ export default {
     findFilm(){
       const requiredfilm = axios.get(`https://api.themoviedb.org/3/search/movie?page=1&include_adult=false&language=it-IT&api_key=2d4086a1da1ceb84b071c2d1750dc6c4&query=${this.searchbox}`)
 
-      const requireserie = axios.get(`https://api.themoviedb.org/3/search/company?page=1&api_key=2d4086a1da1ceb84b071c2d1750dc6c4&query=${this.searchbox}`)
+      const requireserie = axios.get(`https://api.themoviedb.org/3/search/tv?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&query=${this.searchbox}`)
       axios.all([requiredfilm, requireserie]).then(
       axios.spread((...response)=>{
         this.film = response[0].data.results;
-        this.series = response[1].data.results;
+        this.series = response[0].data.results;
         this.searchbox = "";
       })
       );
@@ -81,7 +81,9 @@ export default {
   box-sizing: border-box;
 }
 
-
+h1{
+  color:lime
+}
 
 header {
   height: 5vh;
