@@ -51,7 +51,7 @@ export default {
   methods: {
     callApi() {
       axios
-        .get(`https://api.themoviedb.org/3/search/movie?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&${query=searchbox}`)
+        .get(`https://api.themoviedb.org/3/search/movie?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&query=${searchbox}`)
         .then((response) => {
 
           this.movies = response.data.results;
