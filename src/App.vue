@@ -3,15 +3,15 @@
     <!-- searchbar -->
     <header>
       
-        <input @keyup.enter="filterMovie" v-model="searchbox" type="text" placeholder="Search..." id="search">
-        <button @click="filterMovie" id="search">search</button>
+        <input  v-model="searchbox" type="text" placeholder="Search..." id="search">
+        <button @click="findFilm"  id="search">search</button>
       
     </header>
     <!-- visualizzare: titolo, titolo originale, lingua, voto -->
   
     <main>
       <ul>
-        <li v-for="movie in movies" :key="movie.id">
+        <li v-for="movie in film" :key="movie.id">
           
           <h3>{{movie.title}}</h3>
           <h2>{{movie.original_title}}</h2>
@@ -27,82 +27,45 @@
 
 <script>
 import axios from "axios";
-import { query } from "express";
 export default {
-
-  name: 'App',
-
-  components: {
-
-  },
-
-  data() {
-
-    return {
-      searchbox: "",
-      // URL_APi:"https://api.themoviedb.org/3/search/movie?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&query=string",
-      movies: [],
-
-      error: null,
+  name: "App",
+  data(){
+    return{
+      searchbox:"",
+      film : [],
+      serie : [],
     };
-
   },
+  
 
-  methods: {
-    callApi() {
-      axios
-        .get(`https://api.themoviedb.org/3/search/movie?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&query=${searchbox}`)
-        .then((response) => {
+  methods:{
+    findFilm(){
+      const requiredfilm = axios.get(`https://api.themoviedb.org/3/search/movie?page=1&include_adult=false&language=it-IT&api_key=2d4086a1da1ceb84b071c2d1750dc6c4&query=${this.searchbox}`)
 
-          this.movies = response.data.results;
-          console.log(this.movies);
+      const requireserie = axios.get(`https://api.themoviedb.org/3/search/company?page=1&api_key=2d4086a1da1ceb84b071c2d1750dc6c4&query=${this.searchbox}`)
+      axios.all([requiredfilm, requireserie]).then(
+      axios.spread((...response)=>{
+        this.film = response[0].data.results;
+        this.serie = response[1].data.results;
+        this.searchbox = "";
+      })
+      );
 
-        })
-
-        .catch((error) => {
-          console.log(error)
-          error;
-          this.error = "Ci sono dei problemi...";
-        });
-    },
-
-    filterMovie(){
-      const movie_filtr = [];
-      if((this.movies).includes(this.searchbox.toLowerCase())){
-        console.log("ok");
-        movie_filtr.push(this.movies);
-        console.log(movie_filtr);
-      }else{
-        console.log("non è incluso")
-      }
-      this.searchbox="";
     }
-
-
-  },
-  mounted() {
-    this.callApi();
-  },
-};
-    
-
-        
-
-
-
-
-
-
-
+  }
+}
 </script>
 
 
 
 
-<!-- api: https://api.themoviedb.org/3/search/movie?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&query=string -->
 
 
-<style lang="scss" scoped>
+
+
+
+
+ <style lang="scss" scoped>
 * {
   margin: 0;
   padding: 0;
