@@ -3,7 +3,7 @@
     <!-- searchbar -->
     <header>
       
-        <input @keyup.enter="searchbox" v-model="searchbox" type="text" placeholder="Search..." id="search">
+        <input @keyup.enter="filterMovie" v-model="searchbox" type="text" placeholder="Search..." id="search">
         <button @click="filterMovie" id="search">search</button>
       
     </header>
@@ -67,11 +67,14 @@ export default {
 
     filterMovie(){
       const movie_filtr = [];
-      if(this.movies.includes(this.searchbox)){
+      if((this.movies).includes(this.searchbox)){
         console.log("ok");
         movie_filtr.push(this.movies);
         console.log(movie_filtr);
+      }else{
+        console.log("non è incluso")
       }
+      this.searchbox="";
     }
 
     
