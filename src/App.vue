@@ -3,20 +3,29 @@
     <!-- searchbar -->
     <header>
       
-        <input  v-model="searchbox" type="text" placeholder="Search..." id="search">
+        <input @keyup.enter="findFilm"  v-model="searchbox" type="text" placeholder="Search..." id="search">
         <button @click="findFilm"  id="search">search</button>
       
     </header>
     <!-- visualizzare: titolo, titolo originale, lingua, voto -->
   
     <main>
-      <ul>
+      <ul class="film">
         <li v-for="movie in film" :key="movie.id">
           
           <h3>{{movie.title}}</h3>
           <h2>{{movie.original_title}}</h2>
           <h2>{{movie.original_language}}</h2>
           <h2>{{movie.vote_average}}</h2>
+        </li>
+      </ul>
+
+      <ul class="series">
+        <li v-for="serie in series" :key="serie.id">
+            <h3>{{serie.title}}</h3>
+          <h2>{{serie.original_title}}</h2>
+          <h2>{{serie.original_language}}</h2>
+          <h2>{{serie.vote_average}}</h2>
         </li>
       </ul>
     </main>
@@ -33,7 +42,7 @@ export default {
     return{
       searchbox:"",
       film : [],
-      serie : [],
+      series : [],
     };
   },
   
@@ -46,7 +55,7 @@ export default {
       axios.all([requiredfilm, requireserie]).then(
       axios.spread((...response)=>{
         this.film = response[0].data.results;
-        this.serie = response[1].data.results;
+        this.series = response[1].data.results;
         this.searchbox = "";
       })
       );
@@ -71,6 +80,8 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
+
+
 
 header {
   height: 5vh;
