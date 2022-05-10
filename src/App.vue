@@ -65,7 +65,7 @@ export default {
 
     },
    image_fail(event){
-     event.target.src = "https://picsum.photos/200/300";
+     event.target.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaS7BNTLBsW16U2Of9JRgmOiCybiv6LY2f6g&usqp=CAU";
      console.log("evocato");
    }
 
