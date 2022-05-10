@@ -60,6 +60,13 @@ export default {
 
   methods: {
     //prima milestone
+    /**
+     * questa funzione ci permette di richiamare in maniera dinamica i dati
+     * forniti dall'API. Tramite il search (v-model) la funzione effettua una
+     * chiamata dinamica e restituisce all'utente il film che
+     * ha inserito all'interno dell'input search. E' stata anche implementata
+     * l'opportunità di utilizzare il btn tramite il comando enter da tastiera.
+     */
     findFilm() {
       // chiamata dinamica per i film tramite il search. nNella chiamata aggiungiamo il query : searchbox così da renderla dinamica
       const requiredfilm = axios.get(`https://api.themoviedb.org/3/search/movie?page=1&include_adult=false&api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&query=${this.searchbox}`);
@@ -77,7 +84,12 @@ export default {
         })
       );
     },
-
+    /**
+     * Questa funzione è utile se l'API non ha nessuna immagine da restituire.
+     * Infatti se quest'ultima non presenta l'immagine questa funziona la rimpiazza
+     * come una immagine di defoult così da evitare immagini rotte.
+     * @param {*} event 
+     */
     // se l'immage è mancante l'app la sostituisce con un'altra immagine
     image_fail(event) {
       event.target.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaS7BNTLBsW16U2Of9JRgmOiCybiv6LY2f6g&usqp=CAU";
@@ -85,7 +97,14 @@ export default {
     },
 
     //seconda milestone
-
+    /**
+     * questa funzione accetta un parametro in ingresso che è l'indice.
+     * Questa funzione ci permette di stabilire, in base alla sigla e 
+     * facendo riferimento ad una API opportuna, la bandiera e la mostra a schermo
+     * in forma di immagine
+     * 
+     * @param {*} index 
+     */ 
     printf_flag(index){
       let flag = this.film[index].original_language;
       if(flag === "en"){
@@ -99,8 +118,12 @@ export default {
         console.log(flag);
       }
       return flag;
-    }
-
+    },
+    //questa funzione ci permette di vedere la recensione del film tramite la visualizzazione di stelle colorate
+    VoteStars(index){
+      let vote_views = this.film[index].vote_average;
+      return Math.ceil(vote_views / 2 );
+    },
 
 
 
