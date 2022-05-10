@@ -1,5 +1,12 @@
 <template>
+
   <div id="app">
+    <div class="container-fluid">
+    <div class="container">
+
+      <h1>Benvenuto! Su Ntflix troverai film e serie tv</h1>
+      <button>Entra</button>
+    </div>
     <!-- searchbar -->
     <header>
 
@@ -42,6 +49,7 @@
       </ul>
     </main>
   </div>
+  </div>
 </template>
 
 
@@ -57,6 +65,7 @@ export default {
       //all'api così che quando l'utente inserisce qualcosa l'app è 
       //capace di restituire i risultati opportuni.
       searchbox: "",
+      visible : false,
 
       //salvataggio dei film da mostrare all'utente.
       film: [],
@@ -148,22 +157,34 @@ export default {
 </script>
      
 
-
-
-
-
-
-
-
-
-
+//stile documento
 
  <style lang="scss" scoped>
-* {
-  margin: 0;
-  padding: 0;
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;1,100;1,200;1,300&display=swap');
+*{
+  margin:0;
+  padding:0;
   box-sizing: border-box;
 }
+
+#app{
+  width: 1910px;
+  height: 100.5vh;
+  
+}
+
+ .container-fluid{
+   background-image: url("./assets/img/jumbotron_netflix.jpg");
+   background-size:cover;
+  overflow:hidden;
+  width: 100%;
+   height: 100%;
+   padding-top:50px;
+  filter: brightness(0.5);
+  margin:-10px;
+   
+ }
+
 
 h1 {
   color: lime
@@ -195,3 +216,10 @@ h3 {
 color:yellow;
 }
 </style>
+
+
+
+
+
+
+
