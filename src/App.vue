@@ -135,8 +135,10 @@ export default {
      * @param {*} index 
      */
     VoteStars(index){
-      let vote_views = this.film[index].vote_average;
-      return Math.ceil(vote_views / 2 );
+      const vote_views = this.film[index].vote_average;
+      const voto_round = Math.ceil(vote_views/2);
+      return voto_round;
+      // return Math.ceil(vote_views / 2 );
     },
 
 
