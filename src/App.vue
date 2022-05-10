@@ -19,7 +19,16 @@
           <h2>{{ movie.original_title }}</h2>
          <img :src="'https://flagcdn.com/32x24/' + printf_flag(index) + '.png'" alt="">
 
-          <h2>{{ movie.vote_average }}</h2>
+          <h2 class="star_gold">
+              <span class="votazione">voto: </span>
+              <font-awesome-icon
+              v-for="paux in VoteStars(index)" :key="paux"
+              icon="fa-star"
+              />
+
+              
+
+          </h2>
         </li>
       </ul>
 
@@ -119,7 +128,12 @@ export default {
       }
       return flag;
     },
-    //questa funzione ci permette di vedere la recensione del film tramite la visualizzazione di stelle colorate
+    /**
+     * Questa funzione ci permette, tramite un parametro in ingresso, di:
+     * 1) arrontondare per essere un numero, ovvero il voto, tramite l'apposito metodo math.ceil
+     * 2)mostrare le stelle a schermo grazie al v-for nell'apposita lista
+     * @param {*} index 
+     */
     VoteStars(index){
       let vote_views = this.film[index].vote_average;
       return Math.ceil(vote_views / 2 );
@@ -167,5 +181,15 @@ header {
 
 h3 {
   color: red;
+}
+.votazione{
+  color:black;
+}
+
+
+
+
+.fa-star{
+color:yellow;
 }
 </style>
