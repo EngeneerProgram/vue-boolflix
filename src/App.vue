@@ -11,13 +11,13 @@
 
     <main>
       <ul class="film">
-        <li v-for="(movie) in film" :key="movie.id">
+        <li v-for="(movie, index) in film" :key="movie.id">
           <!-- //se l'oggetto restituito dall'api non ha l'immagine viene sostituita da una immagine random -->
           <img @error="image_fail($event)" :src="'https://image.tmdb.org/t/p/w342/' + movie.poster_path"
             :alt="movie.title">
           <h3>{{ movie.title }}</h3>
           <h2>{{ movie.original_title }}</h2>
-          <country-flag country='it' size='big'/>
+         <img :src="'https://flagcdn.com/32x24/' + printf_flag(index) + '.png'" alt="">
 
           <h2>{{ movie.vote_average }}</h2>
         </li>
@@ -39,6 +39,7 @@
 
 <script>
 import axios from "axios";
+
 export default {
   name: "App",
   data() {
@@ -85,18 +86,20 @@ export default {
 
     //seconda milestone
 
-    // print_flag(index) {
-    //   let original_language = this.film[index].original_language;
-    //   console.log(original_language);
-    //   if (original_language === "en") {
-    //     original_language = "gb";
-    //     console.log(original_language);
-
-    //   } else if (original_language === "ja") {
-    //     original_language = "jp"
-    //   }
-    //   return original_language;
-    // }
+    printf_flag(index){
+      let flag = this.film[index].original_language;
+      if(flag === "en"){
+        flag = "gb"
+        console.log(flag);
+      }else if(flag==="ja"){
+        flag="jp"
+        console.log(flag);
+      }else if(flag==="el"){
+        flag="gr"
+        console.log(flag);
+      }
+      return flag;
+    }
 
 
 
