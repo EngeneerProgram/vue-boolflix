@@ -4,19 +4,21 @@
     <header>
 
       <input @keyup.enter="findFilm" v-model="searchbox" type="text" placeholder="Search..." id="search">
-      <button @click="findFilm"  id="search">search</button>
+      <button @click="findFilm" id="search">search</button>
 
     </header>
     <!-- visualizzare: titolo, titolo originale, lingua, voto -->
 
     <main>
       <ul class="film">
-        <li v-for="movie in film" :key="movie.id">
-        <!-- //se l'oggetto restituito dall'api non ha l'immagine viene sostituita da una immagine random -->
-          <img @error="image_fail($event)" :src="'https://image.tmdb.org/t/p/w342' + movie.poster_path"  :alt="movie.title">
+        <li v-for="(movie) in film" :key="movie.id">
+          <!-- //se l'oggetto restituito dall'api non ha l'immagine viene sostituita da una immagine random -->
+          <img @error="image_fail($event)" :src="'https://image.tmdb.org/t/p/w342/' + movie.poster_path"
+            :alt="movie.title">
           <h3>{{ movie.title }}</h3>
           <h2>{{ movie.original_title }}</h2>
-          <h2>{{ movie.original_language }}</h2>
+          <country-flag country='it' size='big'/>
+
           <h2>{{ movie.vote_average }}</h2>
         </li>
       </ul>
@@ -53,12 +55,14 @@ export default {
       series: [],
     };
   },
-
+  
 
   methods: {
+    //prima milestone
     findFilm() {
-      // chiamata dinamica per i film tramite il search
-      const requiredfilm = axios.get(`https://api.themoviedb.org/3/search/movie?page=1&include_adult=false&api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&query=${this.searchbox}`)
+      // chiamata dinamica per i film tramite il search. nNella chiamata aggiungiamo il query : searchbox così da renderla dinamica
+      const requiredfilm = axios.get(`https://api.themoviedb.org/3/search/movie?page=1&include_adult=false&api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&query=${this.searchbox}`);
+      console.log(requiredfilm);
       // chiamata dinamica per le serie tv tramite il search
       const requireserie = axios.get(`https://api.themoviedb.org/3/search/tv?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&query=${this.searchbox}`)
       axios.all([requiredfilm, requireserie]).then(
@@ -71,19 +75,37 @@ export default {
           this.searchbox = "";
         })
       );
-
     },
 
     // se l'immage è mancante l'app la sostituisce con un'altra immagine
-   image_fail(event){
-     event.target.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaS7BNTLBsW16U2Of9JRgmOiCybiv6LY2f6g&usqp=CAU";
-     console.log("evocato");
-   }
+    image_fail(event) {
+      event.target.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaS7BNTLBsW16U2Of9JRgmOiCybiv6LY2f6g&usqp=CAU";
+      console.log("evocato");
+    },
 
-    
+    //seconda milestone
+
+    // print_flag(index) {
+    //   let original_language = this.film[index].original_language;
+    //   console.log(original_language);
+    //   if (original_language === "en") {
+    //     original_language = "gb";
+    //     console.log(original_language);
+
+    //   } else if (original_language === "ja") {
+    //     original_language = "jp"
+    //   }
+    //   return original_language;
+    // }
+
+
+
+
   }
 }
 </script>
+     
+
 
 
 
