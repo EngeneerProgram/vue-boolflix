@@ -33,18 +33,23 @@
             />
 
             <span class="play"><img src="https://img.cppng.com/download/2020-06/25569-6-play-button-transparent.png" width="70px" alt=""></span>
-          </div>
+          
           
 
-          <div class="curtain info_card d-flex align-items-center flex-column">
-            <h2 class="white">{{ movie.title }}</h2>
-            <h2>{{ movie.release_date }}</h2>
-            <img
-              class="img-fluid flag_img"
-              :src="'https://flagcdn.com/32x24/' + printf_flag(index) + '.png'"
-              alt=""
-            />
-              
+          <div class="info_card d-flex justify-content-center align-items-center flex-column">
+            
+            
+              <h4 class="white">{{ movie.release_date }}</h4>
+              <div class="direction">
+                <h4 class="white">Direction: </h4>
+                
+                <img
+                  class="img-fluid flag_img"
+                  :src="'https://flagcdn.com/32x24/' + printf_flag(index) + '.png'"
+                  alt=""
+                />
+                </div>
+             
             <h3 class="star_gold">
               <!-- <span class="votazione">voto: </span> -->
               <font-awesome-icon
@@ -54,27 +59,10 @@
               />
             </h3>
           </div>
+          </div>
+          <h2 class="white text-center">{{ movie.title }}</h2>
         </div>
-        <!--     
-      <ul class="film">
-        <li v-for="(movie, index) in film" :key="movie.id">
-    
-          <img @error="image_fail($event)" :src="'https://image.tmdb.org/t/p/w300/' + movie.poster_path"
-            :alt="movie.title">
-          <h3>{{ movie.title }}</h3>
-          <h2>{{ movie.original_title }}</h2>
-         <img :src="'https://flagcdn.com/32x24/' + printf_flag(index) + '.png'" alt="">
-
-          <h2 class="star_gold">
-              <span class="votazione">voto: </span>
-              <font-awesome-icon
-              v-for="paux in VoteStars(index)" :key="paux"
-              icon="fa-star"
-              />
-
-          </h2>
-        </li>
-      </ul> -->
+        
 
         <ul class="series">
           <li v-for="serie in series" :key="serie.id">
@@ -215,7 +203,8 @@ export default {
 }
 
 .flag_img{
-  width: 50px;
+  width: 25px;
+  border-radius: 100%
 }
 #app {
   background-color: rgb(51, 51, 51);
@@ -225,8 +214,9 @@ export default {
 
 
 .hero_container {
-  min-height: 100%;
+  min-height: 100vh;
   margin-top:100px;
+  
 }
 
 h1 {
@@ -277,7 +267,7 @@ h3 {
 
 
 .img_thumb{
-  width: 300px;
+  width: 350px;
   height: 400px;
   border-radius:10px;
   cursor:pointer;
@@ -293,19 +283,51 @@ h3 {
 
 .play > img{
   position:absolute;
-  left: 37%;
+  left: 35%;
   top: 45%;
   display:none;
+  cursor:pointer;
 }
 
 
 .card_thumb:hover .play>img{
   display:block;
+  
+}
+
+.card_thumb:hover .info_card{
+  visibility: visible;
+}
+
+.card_thumb:hover .img_thumb{
+  filter:brightness(0.5);
 }
 
 .white{
     color:white;
   }
+
+.direction{
+  width: 100%;
+  display:Flex;
+  align-items: center;
+  justify-content: space-evenly;
+
+  
+}
+
+
+.info_card{
+  width: 100%;
+  position:absolute;
+  bottom:0;
+  text-align: center;
+  visibility: hidden;
+  
+  
+}
+
+
 
 
 </style>
