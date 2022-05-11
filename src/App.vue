@@ -1,26 +1,62 @@
 <template>
-
   <div id="app">
-    <div class="container-fluid">
-    <div class="container">
-
-      <h1>Benvenuto! Su Ntflix troverai film e serie tv</h1>
-      <button>Entra</button>
-    </div>
     <!-- searchbar -->
-    <header>
-
-      <input @keyup.enter="findFilm" v-model="searchbox" type="text" placeholder="Search..." id="search">
-      <button @click="findFilm" id="search">search</button>
-
+    <header class="fixed-top">
+      <img
+        src="./assets/img/Netflix-Logo-2001.png"
+        width="120px"
+        alt=""
+        class="logo img-fluid"
+      />
+      <div class="search_film">
+        <input
+          @keyup.enter="findFilm"
+          v-model="searchbox"
+          type="text"
+          placeholder="Search..."
+          id="search"
+        />
+        <button :disabled="searchbox.length < 1" @click="findFilm" class="btn" id="search">Send</button>
+      </div>
     </header>
     <!-- visualizzare: titolo, titolo originale, lingua, voto -->
 
     <main>
+      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 pt-5 hero_container container d-flex justify-content-evenly  flex-wrap">
+        <div class="movies_card m-3" v-for="(movie, index) in film" :key="movie.id">
+          <div class="img_thumb">
+            <img
+              class="img-fluid img_thumb"
+              @error="image_fail($event)"
+              :src="'https://image.tmdb.org/t/p/w300/' + movie.poster_path"
+              :alt="movie.title"
+            />
+          </div>
+
+          <div class="info_card d-flex align-items-center flex-column">
+            <h2>{{ movie.title }}</h2>
+            <h2>{{ movie.original_title }}</h2>
+            <img
+              class="img-fluid flag_img"
+              :src="'https://flagcdn.com/32x24/' + printf_flag(index) + '.png'"
+              alt=""
+            />
+
+            <h3 class="star_gold">
+              <!-- <span class="votazione">voto: </span> -->
+              <font-awesome-icon
+                v-for="paux in VoteStars(index)"
+                :key="paux"
+                icon="fa-star"
+              />
+            </h3>
+          </div>
+        </div>
+        <!--     
       <ul class="film">
         <li v-for="(movie, index) in film" :key="movie.id">
-          <!-- //se l'oggetto restituito dall'api non ha l'immagine viene sostituita da una immagine random -->
-          <img @error="image_fail($event)" :src="'https://image.tmdb.org/t/p/w342/' + movie.poster_path"
+    
+          <img @error="image_fail($event)" :src="'https://image.tmdb.org/t/p/w300/' + movie.poster_path"
             :alt="movie.title">
           <h3>{{ movie.title }}</h3>
           <h2>{{ movie.original_title }}</h2>
@@ -33,24 +69,24 @@
               icon="fa-star"
               />
 
-              
-
           </h2>
         </li>
-      </ul>
+      </ul> -->
 
-      <ul class="series">
-        <li v-for="serie in series" :key="serie.id">
-          <h1>{{ serie.title }}</h1>
-          <h2>{{ serie.original_title }}</h2>
-          <h2>{{ serie.original_language }}</h2>
-          <h2>{{ serie.vote_average }}</h2>
-        </li>
-      </ul>
+        <ul class="series">
+          <li v-for="serie in series" :key="serie.id">
+            <h1>{{ serie.title }}</h1>traduttore
+            <h2>{{ serie.original_title }}</h2>
+            <h2>{{ serie.original_language }}</h2>
+            <h2>{{ serie.vote_average }}</h2>
+          </li>
+        </ul>
+      </div>
     </main>
   </div>
-  </div>
 </template>
+
+              
 
 
 
@@ -61,20 +97,21 @@ export default {
   name: "App",
   data() {
     return {
-      //v-model, questo componente va inserito nel query appartenente 
-      //all'api così che quando l'utente inserisce qualcosa l'app è 
+      //v-model, questo componente va inserito nel query appartenente
+      //all'api così che quando l'utente inserisce qualcosa l'app è
       //capace di restituire i risultati opportuni.
       searchbox: "",
-      visible : false,
 
       //salvataggio dei film da mostrare all'utente.
       film: [],
 
       //salvataggio delle serie tv da mostrare all'utente
       series: [],
+
+      value1: true,
+      value2: false,
     };
   },
-  
 
   methods: {
     //prima milestone
@@ -87,10 +124,14 @@ export default {
      */
     findFilm() {
       // chiamata dinamica per i film tramite il search. nNella chiamata aggiungiamo il query : searchbox così da renderla dinamica
-      const requiredfilm = axios.get(`https://api.themoviedb.org/3/search/movie?page=1&include_adult=false&api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&query=${this.searchbox}`);
+      const requiredfilm = axios.get(
+        `https://api.themoviedb.org/3/search/movie?page=1&include_adult=false&api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&query=${this.searchbox}`
+      );
       console.log(requiredfilm);
       // chiamata dinamica per le serie tv tramite il search
-      const requireserie = axios.get(`https://api.themoviedb.org/3/search/tv?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&query=${this.searchbox}`)
+      const requireserie = axios.get(
+        `https://api.themoviedb.org/3/search/tv?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&query=${this.searchbox}`
+      );
       axios.all([requiredfilm, requireserie]).then(
         axios.spread((...response) => {
           this.film = [...response[0].data.results];
@@ -106,33 +147,34 @@ export default {
      * Questa funzione è utile se l'API non ha nessuna immagine da restituire.
      * Infatti se quest'ultima non presenta l'immagine questa funziona la rimpiazza
      * come una immagine di defoult così da evitare immagini rotte.
-     * @param {*} event 
+     * @param {*} event
      */
     // se l'immage è mancante l'app la sostituisce con un'altra immagine
     image_fail(event) {
-      event.target.src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaS7BNTLBsW16U2Of9JRgmOiCybiv6LY2f6g&usqp=CAU";
+      event.target.src =
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaS7BNTLBsW16U2Of9JRgmOiCybiv6LY2f6g&usqp=CAU";
       console.log("evocato");
     },
 
     //seconda milestone
     /**
      * questa funzione accetta un parametro in ingresso che è l'indice.
-     * Questa funzione ci permette di stabilire, in base alla sigla e 
+     * Questa funzione ci permette di stabilire, in base alla sigla e
      * facendo riferimento ad una API opportuna, la bandiera e la mostra a schermo
      * in forma di immagine
-     * 
-     * @param {*} index 
-     */ 
-    printf_flag(index){
+     *
+     * @param {*} index
+     */
+    printf_flag(index) {
       let flag = this.film[index].original_language;
-      if(flag === "en"){
-        flag = "gb"
+      if (flag === "en") {
+        flag = "gb";
         console.log(flag);
-      }else if(flag==="ja"){
-        flag="jp"
+      } else if (flag === "ja") {
+        flag = "jp";
         console.log(flag);
-      }else if(flag==="el"){
-        flag="gr"
+      } else if (flag === "el") {
+        flag = "gr";
         console.log(flag);
       }
       return flag;
@@ -141,79 +183,96 @@ export default {
      * Questa funzione ci permette, tramite un parametro in ingresso, di:
      * 1) arrontondare per essere un numero, ovvero il voto, tramite l'apposito metodo math.ceil
      * 2)mostrare le stelle a schermo grazie al v-for nell'apposita lista
-     * @param {*} index 
+     * @param {*} index
      */
-    VoteStars(index){
+    VoteStars(index) {
       const vote_views = this.film[index].vote_average;
-      const voto_round = Math.ceil(vote_views/2);
+      const voto_round = Math.ceil(vote_views / 2);
       return voto_round;
       // return Math.ceil(vote_views / 2 );
     },
-
-
-
-  }
-}
+  },
+};
 </script>
      
 
 //stile documento
 
  <style lang="scss" scoped>
- @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;1,100;1,200;1,300&display=swap');
-*{
-  margin:0;
-  padding:0;
+@import "~/node_modules/bootstrap/scss/bootstrap.scss";
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;1,100;1,200;1,300&display=swap");
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
-
 #app{
-  width: 1910px;
-  height: 100.5vh;
-  
+  display:flex;
+  justify-content: center;
 }
 
- .container-fluid{
-   background-image: url("./assets/img/jumbotron_netflix.jpg");
-   background-size:cover;
-  overflow:hidden;
-  width: 100%;
-   height: 100%;
-   padding-top:50px;
-  filter: brightness(0.5);
-  margin:-10px;
-   
- }
+.flag_img{
+  width: 50px;
+}
+#app {
+  background-color: rgb(51, 51, 51);
+  min-height: 100vh;
+  margin: -8px;
+}
 
+.img_thumb{
+  width: 280px;
+  height: 400px;
+  border-radius:10px;
+}
+
+.hero_container {
+  min-height: 100%;
+  margin-top:100px;
+}
 
 h1 {
-  color: lime
+  color: lime;
 }
 
 header {
-  height: 5vh;
+  padding: 2rem;
+  height: 10vh;
   display: Flex;
   align-items: center;
+  justify-content: space-between;
+  background-color: black;
+}
+.btn {
+  cursor: pointer;
+  transition: 1s;
+  font-weight: bold;
+  color:white;
+  letter-spacing: 1px;
+  background:red;
 
 }
 
+.btn:hover {
+  background-color: red;
+  color: white;
+}
 #search {
   padding: 5px 10px;
   margin: 10px;
+  border-radius: 10px;
+  border: none;
 }
 
 h3 {
   color: red;
 }
-.votazione{
-  color:black;
+.votazione {
+  color: black;
 }
 
-
-
-
-.fa-star{
-color:yellow;
+.fa-star {
+  color: yellow;
 }
 </style>
 
