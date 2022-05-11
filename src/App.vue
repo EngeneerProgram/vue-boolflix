@@ -24,24 +24,27 @@
     <main>
       <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 pt-5 hero_container container d-flex justify-content-evenly  flex-wrap">
         <div class="movies_card m-3" v-for="(movie, index) in film" :key="movie.id">
-          <div class="img_thumb">
+          <div class="card_thumb">
             <img
               class="img-fluid img_thumb"
               @error="image_fail($event)"
               :src="'https://image.tmdb.org/t/p/w300/' + movie.poster_path"
               :alt="movie.title"
             />
-          </div>
 
-          <div class="info_card d-flex align-items-center flex-column">
-            <h2>{{ movie.title }}</h2>
-            <h2>{{ movie.original_title }}</h2>
+            <span class="play"><img src="https://img.cppng.com/download/2020-06/25569-6-play-button-transparent.png" width="70px" alt=""></span>
+          </div>
+          
+
+          <div class="curtain info_card d-flex align-items-center flex-column">
+            <h2 class="white">{{ movie.title }}</h2>
+            <h2>{{ movie.release_date }}</h2>
             <img
               class="img-fluid flag_img"
               :src="'https://flagcdn.com/32x24/' + printf_flag(index) + '.png'"
               alt=""
             />
-
+              
             <h3 class="star_gold">
               <!-- <span class="votazione">voto: </span> -->
               <font-awesome-icon
@@ -220,11 +223,6 @@ export default {
   margin: -8px;
 }
 
-.img_thumb{
-  width: 280px;
-  height: 400px;
-  border-radius:10px;
-}
 
 .hero_container {
   min-height: 100%;
@@ -255,7 +253,7 @@ header {
 
 .btn:hover {
   background-color: red;
-  color: white;
+  color: white; position:relative;
 }
 #search {
   padding: 5px 10px;
@@ -274,6 +272,42 @@ h3 {
 .fa-star {
   color: yellow;
 }
+
+// sezione tendina
+
+
+.img_thumb{
+  width: 300px;
+  height: 400px;
+  border-radius:10px;
+  cursor:pointer;
+ 
+  
+}
+
+.card_thumb{
+  position:relative;
+
+  
+}
+
+.play > img{
+  position:absolute;
+  left: 37%;
+  top: 45%;
+  display:none;
+}
+
+
+.card_thumb:hover .play>img{
+  display:block;
+}
+
+.white{
+    color:white;
+  }
+
+
 </style>
 
 
