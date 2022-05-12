@@ -1,7 +1,56 @@
 <template>
   <div id="app">
     <!-- searchbar -->
-    <header class="fixed-top">
+    <div v-show="value2" class="container_fluid hex_container">
+      <div class="banner_access">
+        <h1 class="white init">
+          Film, serie TV e tanto <br />
+          altro. Senza limiti
+        </h1>
+        <p class="white init">
+          Guarda ciò che vuoi ovunque. Disdici quando vuoi.
+        </p>
+        <div class="form_access_to_app">
+          <form action="get">
+            <div class="login_input">
+              <input
+                placeholder="mario-rossi@gmail.com"
+                v-model="email_input"
+                @keyup.enter="Login_system"
+                type="email"
+                class="form-control login"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                required
+              />
+              <input
+                placeholder="*********"
+                @keyup.enter="Login_system"
+                v-model="password"
+                type="password"
+                class="form-control login"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                required
+              />
+            </div>
+            <button
+              @click="Login_system"
+              type="button"
+              class="btn btn-danger get_started"
+              :disabled="email_input <5 || password <4"
+            >
+              Enter
+            </button>
+          </form>
+        </div>
+        <div  v-show="bol_falso" class="access_neg">
+          <p class="alert_login">Non abbiamo trovato nessun occount con questo indirizzo email. Riprova o crea un nuovo occount.</p>
+        </div>
+      </div>
+    </div>
+
+    <header v-show="value1" id="1" class="fixed-top">
       <img
         src="./assets/img/Netflix-Logo-2001.png"
         width="120px"
@@ -16,62 +65,148 @@
           placeholder="Search..."
           id="search"
         />
-        <button :disabled="searchbox.length < 1" @click="findFilm" class="btn" id="search">Send</button>
+
+        <button
+          :disabled="searchbox.length < 1"
+          @click="findFilm"
+          class="btn"
+          id="search"
+        >
+          Send
+        </button>
       </div>
     </header>
     <!-- visualizzare: titolo, titolo originale, lingua, voto -->
 
-    <main>
-      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 pt-5 hero_container container d-flex justify-content-evenly  flex-wrap">
-        <div class="movies_card m-3" v-for="(movie, index) in film" :key="movie.id">
+    <main v-show="value1">
+      <!-- <div class="container-fluid">
+        <div class="start">
+        <h1 class="White">Film, serie TV e tanto <br>altro. Senza limiti.</h1>
+        <p class="white">Guarda tutto ciò che vuoi ovunque. Disdici quando vuoi.</p>
+        <button class="btn btn-danger" type="Inizia">Button</button>
+      </div> -->
+
+      <div
+        class="
+          row row-cols-2 row-cols-md-3 row-cols-lg-5
+          pt-5
+          hero_container
+          container-fluid
+          d-flex
+          justify-content-evenly
+          flex-wrap
+        "
+      >
+        <div
+          class="movies_card m-3"
+          v-for="(movie, index) in film"
+          :key="movie.id"
+        >
+          <div class="card_thumb">
+            <img
+              class="img-fluid img_thumb scale"
+              @error="image_fail($event)"
+              :src="'https://image.tmdb.org/t/p/w400/' + movie.poster_path"
+              :alt="movie.title"
+            />
+
+            <span class="play"
+              ><img
+                src="https://img.cppng.com/download/2020-06/25569-6-play-button-transparent.png"
+                width="70px"
+                alt=""
+            /></span>
+
+            <div
+              class="
+                info_card
+                d-flex
+                justify-content-center
+                align-items-center
+                flex-column
+              "
+            >
+              <h4 class="white">{{ movie.release_date }}</h4>
+              <div class="direction">
+                <h4 class="white">Direction:</h4>
+
+                <img
+                  class="img-fluid flag_img"
+                  :src="
+                    'https://flagcdn.com/32x24/' + printf_flag(index) + '.png'
+                  "
+                  alt=""
+                />
+              </div>
+
+              <h3 class="star_gold">
+                <!-- <span class="votazione">voto: </span> -->
+                <font-awesome-icon
+                  v-for="paux in VoteStars(index)"
+                  :key="paux"
+                  icon="fa-star"
+                />
+              </h3>
+            </div>
+          </div>
+          <h2 class="white text-center">{{ movie.title }}</h2>
+        </div>
+
+        <!-- //serie -->
+
+        <div
+          class="movies_card m-3"
+          v-for="(serie, index) in series"
+          :key="index"
+        >
           <div class="card_thumb">
             <img
               class="img-fluid img_thumb"
               @error="image_fail($event)"
-              :src="'https://image.tmdb.org/t/p/w300/' + movie.poster_path"
-              :alt="movie.title"
+              :src="'https://image.tmdb.org/t/p/w300/' + serie.poster_path"
+              :alt="serie.title"
             />
 
-            <span class="play"><img src="https://img.cppng.com/download/2020-06/25569-6-play-button-transparent.png" width="70px" alt=""></span>
-          
-          
+            <span class="play"
+              ><img
+                src="https://img.cppng.com/download/2020-06/25569-6-play-button-transparent.png"
+                width="70px"
+                alt=""
+            /></span>
 
-          <div class="info_card d-flex justify-content-center align-items-center flex-column">
-            
-            
-              <h4 class="white">{{ movie.release_date }}</h4>
+            <div
+              class="
+                info_card
+                d-flex
+                justify-content-center
+                align-items-center
+                flex-column
+              "
+            >
+              <h4 class="white">{{ serie.release_date }}</h4>
               <div class="direction">
-                <h4 class="white">Direction: </h4>
-                
+                <h4 class="white">Direction:</h4>
+
                 <img
                   class="img-fluid flag_img"
-                  :src="'https://flagcdn.com/32x24/' + printf_flag(index) + '.png'"
+                  :src="
+                    'https://flagcdn.com/32x24/' + printf_flag(index) + '.png'
+                  "
                   alt=""
                 />
-                </div>
-             
-            <h3 class="star_gold">
-              <!-- <span class="votazione">voto: </span> -->
-              <font-awesome-icon
-                v-for="paux in VoteStars(index)"
-                :key="paux"
-                icon="fa-star"
-              />
-            </h3>
-          </div>
-          </div>
-          <h2 class="white text-center">{{ movie.title }}</h2>
-        </div>
-        
+              </div>
 
-        <ul class="series">
-          <li v-for="serie in series" :key="serie.id">
-            <h1>{{ serie.title }}</h1>traduttore
-            <h2>{{ serie.original_title }}</h2>
-            <h2>{{ serie.original_language }}</h2>
-            <h2>{{ serie.vote_average }}</h2>
-          </li>
-        </ul>
+              <h3 class="star_gold">
+                <font-awesome-icon
+                  v-for="paux in VoteStars(index)"
+                  :key="paux"
+                  icon="fa-star"
+                />
+              </h3>
+            </div>
+          </div>
+          <h2 class="white text-center">{{ serie.title }}</h2>
+        </div>
       </div>
     </main>
   </div>
@@ -92,15 +227,17 @@ export default {
       //all'api così che quando l'utente inserisce qualcosa l'app è
       //capace di restituire i risultati opportuni.
       searchbox: "",
+      email_input: "",
+      password: "",
 
       //salvataggio dei film da mostrare all'utente.
       film: [],
 
       //salvataggio delle serie tv da mostrare all'utente
       series: [],
-
-      value1: true,
-      value2: false,
+      value1: false,
+      bol_falso :false,
+      value2: true,
     };
   },
 
@@ -121,7 +258,7 @@ export default {
       console.log(requiredfilm);
       // chiamata dinamica per le serie tv tramite il search
       const requireserie = axios.get(
-        `https://api.themoviedb.org/3/search/tv?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&include_adult=false&query=${this.searchbox}`
+        `https://api.themoviedb.org/3/search/tv?api_key=2d4086a1da1ceb84b071c2d1750dc6c4&language=it-IT&page=1&query=${this.searchbox}&include_adult=false`
       );
       axios.all([requiredfilm, requireserie]).then(
         axios.spread((...response) => {
@@ -146,7 +283,65 @@ export default {
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaS7BNTLBsW16U2Of9JRgmOiCybiv6LY2f6g&usqp=CAU";
       console.log("evocato");
     },
+    Login_system() {
+      console.log("ciao");
+      let input = this.email_input;
+      let pass = this.password;
+      console.log(input);
 
+      const mail = [
+        "saro.garufi1@gmail.com",
+        "giovanni@gmail.com",
+        "marco@gmail.com",
+        "fabio1234@gmail.com",
+        "marta@gmail.com",
+        "martina@hotmail.com",
+      ];
+      const password = ["rosario95", "giovanni", "marco", "fabio"];
+      console.log(mail);
+      console.log(password);
+      let booleaner = false;
+      let bool = false;
+      for (let i = 0; i < mail.length; i++) {
+        console.log(mail[i]);
+        if (input == mail[i]) {
+          //console.log("funziona");
+          bool = true;
+        }
+        //return input;
+      }
+
+      for (let i = 0; i < password.length; i++) {
+        console.log(password[i]);
+        if (pass == password[i]) {
+          //console.log("funziona");
+          booleaner = true;
+        }
+        //return input;
+      }
+
+      if (booleaner == true) {
+        console.log("funziona passowrddd!!");
+      }
+
+      if (bool == true) {
+        console.log("email funziona!!");
+      }
+
+      if(booleaner != true || bool != true){
+        this.bol_falso = this.value2;
+        return 0;
+      
+      }
+      this.email_input = "";
+      this.password = "";
+      this.value1 = true;
+      this.value2 = false;
+      
+      
+
+      // this.Autorized();
+    },
     //seconda milestone
     /**
      * questa funzione accetta un parametro in ingresso che è l'indice.
@@ -187,7 +382,7 @@ export default {
 </script>
      
 
-//stile documento
+//stile documentotransform: scale(1.2);
 
  <style lang="scss" scoped>
 @import "~/node_modules/bootstrap/scss/bootstrap.scss";
@@ -197,30 +392,96 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-#app{
-  display:flex;
-  justify-content: center;
+// #app{
+//   font-family:Arial, Helvetica, sans-serif;
+//   display:flex;
+//   justify-content: center;
+//   align-items: center;
+//   background-image: url("./assets/img/jumbotron_netflix.jpg");
+//   background-blend-mode: overlay;
+//   font-weight: bold;
+//   margin: -8px;
+//   background-color: rgb(51, 51, 51);
+//   min-height: 100vh;
+// }
+.alert_login{
+  font-size: 15px;
+  color:white;
+  padding:8px;
+  // width: 304px;
+  // height: 56px;
+  // background-color:rgb(232, 124, 3) ;
 }
 
-.flag_img{
-  width: 25px;
-  border-radius: 100%
+.access_neg{
+  width: 268px;
+  height: 100px;
+  background-color:rgb(232, 124, 3) ;
+  border-radius: 10px;
 }
-#app {
+.hex_container {
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("./assets/img/jumbotron_netflix.jpg");
+  background-blend-mode: overlay;
+  font-weight: bold;
+  margin: -8px;
   background-color: rgb(51, 51, 51);
   min-height: 100vh;
-  margin: -8px;
 }
 
+.banner_access > h1 {
+  font-size: 55px;
+}
 
+.init {
+  font-size: 28px;
+}
+
+.init {
+  font-weight: bold;
+}
+
+.flag_img {
+  width: 25px;
+  border-radius: 100%;
+}
+
+.login {
+  margin: 15px;
+  border-bottom:5px solid rgb(232, 124, 3);
+}
+
+// .container-fluid{
+//   width: 100vw;
+//   height: 89.5vh;
+
+//   display:flex;
+//   flex-wrap: wrap;
+//   flex-direction: column;
+//   align-items: center;
+
+// }
 .hero_container {
-  min-height: 100vh;
-  margin-top:100px;
-  
+  background-color: rgb(43, 42, 42);
+  // min-height: 80vh;
+  // margin-top:100px;
+  margin-top: 20px;
+  width: 1909px;
 }
 
-h1 {
-  color: lime;
+.get_started {
+  width: 90px;
+  height: 58px;
+  margin-left:65px;
+}
+
+.form_access_to_app > form {
+  display: Flex;
+  
+  align-items: center;
 }
 
 header {
@@ -235,19 +496,19 @@ header {
   cursor: pointer;
   transition: 1s;
   font-weight: bold;
-  color:white;
+  color: white;
   letter-spacing: 1px;
-  background:red;
-
+  background: red;
 }
 
 .btn:hover {
   background-color: red;
-  color: white; position:relative;
+  color: white;
+  position: relative;
 }
 #search {
-  padding: 5px 10px;
-  margin: 10px;
+  padding: 8px 12px;
+  margin-right: 10px;
   border-radius: 10px;
   border: none;
 }
@@ -265,71 +526,63 @@ h3 {
 
 // sezione tendina
 
+.img_thumb {
+  width: 320px;
+  height: 425px;
 
-.img_thumb{
-  width: 350px;
-  height: 400px;
-  border-radius:10px;
-  cursor:pointer;
- 
-  
+  border-radius: 10px;
+  cursor: pointer;
 }
 
-.card_thumb{
-  position:relative;
-
-  
+.card_thumb {
+  position: relative;
 }
 
-.play > img{
-  position:absolute;
+.play > img {
+  position: absolute;
   left: 35%;
   top: 45%;
-  display:none;
-  cursor:pointer;
+  display: none;
+  cursor: pointer;
 }
 
-
-.card_thumb:hover .play>img{
-  display:block;
-  
+.card_thumb:hover .play > img {
+  display: block;
 }
 
-.card_thumb:hover .info_card{
+.card_thumb:hover .info_card {
   visibility: visible;
 }
 
-.card_thumb:hover .img_thumb{
-  filter:brightness(0.5);
+.card_thumb:hover .img_thumb {
+  filter: brightness(0.5);
 }
 
-.white{
-    color:white;
-  }
+.movies_card {
+  padding-top: 50px;
+}
+.white {
+  color: white;
+}
 
-.direction{
+.direction {
   width: 100%;
-  display:Flex;
+  display: Flex;
   align-items: center;
   justify-content: space-evenly;
-
-  
 }
 
-
-.info_card{
+.info_card {
   width: 100%;
-  position:absolute;
-  bottom:0;
+  position: absolute;
+  bottom: 0;
   text-align: center;
   visibility: hidden;
-  
-  
 }
 
-
-
-
+.login_input{
+  margin-left: -11.2px;
+}
 </style>
 
 
