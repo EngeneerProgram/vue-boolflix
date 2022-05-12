@@ -220,11 +220,8 @@
                   v-for="paux in VoteStars(index)"
                   :key="paux"
                   icon="fa-star"
-                />display: Flex;
-    justify-content: ;
-￼    /* align-items: center; */
-￼    margin: 100px;
-}
+                />
+
               </h3>
             </div>
           </div>
