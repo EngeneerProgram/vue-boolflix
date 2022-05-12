@@ -76,8 +76,11 @@
         </button>
       </div>
     </header>
-    <!-- visualizzare: titolo, titolo originale, lingua, voto -->
-
+    
+        
+        
+      
+    
     <main v-show="value1">
       <!-- <div class="container-fluid">
         <div class="start">
@@ -86,7 +89,7 @@
         <button class="btn btn-danger" type="Inizia">Button</button>
       </div> -->
 
-      <div
+      <div v-show="false"
         class="
           row row-cols-2 row-cols-md-3 row-cols-lg-5
           pt-5
@@ -201,7 +204,11 @@
                   v-for="paux in VoteStars(index)"
                   :key="paux"
                   icon="fa-star"
-                />
+                />display: Flex;
+    justify-content: ;
+￼    /* align-items: center; */
+￼    margin: 100px;
+}
               </h3>
             </div>
           </div>
@@ -237,7 +244,88 @@ export default {
       series: [],
       value1: false,
       bol_falso :false,
+      card:false,
       value2: true,
+      movie:[
+        {
+          
+          img:"/assets/img/film.jpg",
+          title: "Altered Carbon"
+        },
+
+        {
+          img:"./assets/img/film1.jpg",
+          title: "The Protector"
+        },
+
+        {
+          img:"./assets/img/film2.jpg",
+          title: "The Woman In The Window"
+        },
+
+        {
+          img:"./assets/img/film3.jpg",
+          title: "Enola Holmes"
+        },
+
+        {
+          img:"./assets/img/film4.jpg",
+          title: "Granchio Nero"
+        },
+
+        {
+          img:"./assets/img/film5.jpg",
+          title: "6 Underground"
+        },
+
+        {
+          img:"./assets/img/film6.jpg",
+          title: "I am all girls"
+        },
+
+        {
+          img:"./assets/img/film7.jpg",
+          title: "Insieme per forza"
+        },
+        
+        
+        
+      ],
+      serie:[
+        {
+          img:"./assets/img/serie1.jpg",
+          title:"La Casa Di Carta"
+        },
+
+        {
+          img:"./assets/img/serie2.jpg",
+          title:"La Casa Di Carta"
+        },
+        {
+          img:"./assets/img/serie3.jpg",
+          title:"La Casa Di Carta"
+        },
+        {
+          img:"./assets/img/serie4.jpg",
+          title:"La Casa Di Carta"
+        },
+        {
+          img:"./assets/img/serie5.jpg",
+          title:"La Casa Di Carta"
+        },
+        {
+          img:"./assets/img/serie6.jpg",
+          title:"La Casa Di Carta"
+        },
+        {
+          img:"./assets/img/serie7.jpg",
+          title:"La Casa Di Carta"
+        },
+        {
+          img:"./assets/img/serie8.jpg",
+          title:"La Casa Di Carta"
+        },
+      ]
     };
   },
 
@@ -268,6 +356,7 @@ export default {
           console.log(this.series);
           //l'input del v-model viene impostato a " " dopo che l'utente ha inserito qualcosa
           this.searchbox = "";
+          this.card=false;
         })
       );
     },
@@ -330,6 +419,8 @@ export default {
 
       if(booleaner != true || bool != true){
         this.bol_falso = this.value2;
+        this.email_input = "";
+        this.password = "";
         return 0;
       
       }
@@ -337,7 +428,7 @@ export default {
       this.password = "";
       this.value1 = true;
       this.value2 = false;
-      
+      this.card = true;
       
 
       // this.Autorized();
@@ -404,6 +495,12 @@ export default {
 //   background-color: rgb(51, 51, 51);
 //   min-height: 100vh;
 // }
+
+
+    
+
+
+
 .alert_login{
   font-size: 15px;
   color:white;
