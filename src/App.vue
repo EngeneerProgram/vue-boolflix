@@ -82,6 +82,22 @@
       
     
     <main v-show="value1">
+
+    <!-- <div v-show="card" class="gx container-fluid d-flex flex-wrap">
+      <img v-show="card" class=" mx img_thumb" src="./assets/img/film.jpg" alt="">
+      <img v-show="card" class=" mx img_thumb" src="./assets/img/film1.jpg" alt="">
+      <img v-show="card" class=" mx img_thumb" src="./assets/img/film2.jpg" alt="">
+      <img v-show="card"  class="mx img_thumb" src="./assets/img/film3.jpg" alt="">
+      <img v-show="card" class="mx img_thumb" src="./assets/img/film4.jpg" alt="">
+
+      <img v-show="card" class=" mx img_thumb" src="./assets/img/serie1.jpg" alt="">
+      <img v-show="card" class=" mx img_thumb" src="./assets/img/serie2.jpg" alt="">
+      <img v-show="card" class=" mx img_thumb" src="./assets/img/serie3.jpg" alt="">
+      <img v-show="card" class=" mx img_thumb" src="./assets/img/serie4.jpg" alt="">
+      <img v-show="card" class=" mx img_thumb" src="./assets/img/serie5.jpg" alt="">
+
+
+    </div> -->
       <!-- <div class="container-fluid">
         <div class="start">
         <h1 class="White">Film, serie TV e tanto <br>altro. Senza limiti.</h1>
@@ -89,7 +105,7 @@
         <button class="btn btn-danger" type="Inizia">Button</button>
       </div> -->
 
-      <div v-show="false"
+      <div v-show="value1"
         class="
           row row-cols-2 row-cols-md-3 row-cols-lg-5
           pt-5
@@ -567,6 +583,16 @@ export default {
   // margin-top:100px;
   margin-top: 20px;
   width: 1909px;
+}
+.mx{
+  margin:10px;
+}
+.gx{
+  margin:10px;
+  display:flex;
+  align-content: center;
+  justify-content: center;
+  height: 100vh;
 }
 
 .get_started {
